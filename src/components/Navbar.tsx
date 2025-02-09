@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Smartphone, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/Logo.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-3">
-          <img src="/assets/Logo.png" alt="SRM ONE Logo" className="h-[60px] w-auto" />
+          <img src={logo} alt="SRM ONE Logo" className="h-[60px] w-auto" />
             <span className="text-2xl font-semibold">SRM ONE</span>
           </Link>
           
