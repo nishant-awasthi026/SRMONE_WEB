@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Smartphone, Github, Twitter, Linkedin, Mail, Heart } from 'lucide-react';
-import logo from "../assets/logo.png"
+import logo1 from '../assets/Logo.png'
 
 const Footer = () => {
   return (
@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-3">
-            <img src={logo} alt="SRM ONE Logo" className="h-[40px] w-auto" />
+            <img src={logo1} alt="SRM ONE Logo" className="h-[40px] w-auto" />
               <span className="text-xl font-semibold">SRM ONE</span>
             </Link>
             <p className="text-gray-400 text-sm">
