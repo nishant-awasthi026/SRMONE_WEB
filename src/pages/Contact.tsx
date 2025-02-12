@@ -105,18 +105,17 @@ const Contact = () => {
           className="bg-white/5 rounded-2xl p-6 backdrop-blur-sm"
         >
           <h2 className="text-2xl font-semibold mb-6">Join Our Community</h2>
-         <a
-  href="https://chat.whatsapp.com/GERScW8Xeat4Apl3ejdxbT"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="flex items-center space-x-3 bg-gradient-to-r from-[#25D366] to-[#128C7E] p-4 rounded-lg hover:opacity-90 transition-opacity"
->
-  <MessageCircle size={24} />
-  <span>Join WhatsApp Group</span>
-</a>
+          <motion.a
+            href="https://chat.whatsapp.com/GERScW8Xeat4Apl3ejdxbT"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-3 bg-gradient-to-r from-[#25D366] to-[#128C7E] p-4 rounded-lg hover:opacity-90 transition-opacity"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
             <MessageCircle size={24} />
             <span>Join WhatsApp Group</span>
-          </a>
+          </motion.a>
         </motion.div>
       </div>
     </div>
