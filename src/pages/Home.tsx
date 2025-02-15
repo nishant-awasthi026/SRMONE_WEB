@@ -249,13 +249,13 @@ const features = [
 ];
 
 function InteractiveScroller() {
-  const containerRef = useRef(null);
-  const [offset, setOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const startXRef = useRef(0);
-  const lastOffsetRef = useRef(0);
-  const previousTimestampRef = useRef(null);
-  const scrollWidthRef = useRef(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [offset, setOffset] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const startXRef = useRef<number>(0);
+  const lastOffsetRef = useRef<number>(0);
+  const previousTimestampRef = useRef<number | null>(null);
+  const scrollWidthRef = useRef<number>(0);
   const autoScrollSpeed = 100; // pixels per second
 
   // Measure the width of one set of images (half the total width)
@@ -268,10 +268,11 @@ function InteractiveScroller() {
 
   // Auto-scroll using requestAnimationFrame
   useEffect(() => {
-    let animationFrame;
-    const step = (timestamp) => {
-      if (!previousTimestampRef.current)
+    let animationFrame: number;
+    const step = (timestamp: number) => {
+      if (previousTimestampRef.current === null) {
         previousTimestampRef.current = timestamp;
+      }
       const delta = timestamp - previousTimestampRef.current;
       previousTimestampRef.current = timestamp;
       if (!isDragging && scrollWidthRef.current) {
@@ -290,26 +291,25 @@ function InteractiveScroller() {
   }, [isDragging]);
 
   // Pointer events (works for both mouse and touch)
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     setIsDragging(true);
     startXRef.current = e.clientX;
     lastOffsetRef.current = offset;
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging) return;
     const dx = e.clientX - startXRef.current;
     setOffset(lastOffsetRef.current + dx);
   };
 
-  const handlePointerUp = (e) => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     setIsDragging(false);
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
-  // Calculate effective offset to ensure a seamless loop:
-  // We always want a value between -scrollWidth and 0.
+  // Calculate effective offset to ensure a seamless loop
   let effectiveOffset = offset;
   if (scrollWidthRef.current) {
     effectiveOffset = offset % scrollWidthRef.current;
