@@ -8,7 +8,16 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ['emailjs-com'],
+      external: ['emailjs-com'], // Remove if you switch to @emailjs/browser
+    },
+  },
+  server: {
+    port: 3000, // Optional: Change the port if needed
+    open: true, // Opens browser on server start
+  },
+  resolve: {
+    alias: {
+      '@': '/src', // Optional: Helps with cleaner imports
     },
   },
 });
