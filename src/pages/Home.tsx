@@ -213,8 +213,10 @@
 // export default Home;
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Download } from 'lucide-react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import * as Popmotion from 'popmotion'; 
+const { wrap } = Popmotion; 
 import s0 from '../assets/s0.png';
 import s1_1 from '../assets/s1_1.png';
 import s1_2 from '../assets/s1_2.png';
@@ -249,90 +251,52 @@ const features = [
 ];
 
 function InteractiveScroller() {
+  // Use screenshots array for scrolling
+  const screenshots = [s0, s1_1, s1_2, s2, s3, s4_1, s4_2, s5];
+  const items = [...screenshots, ...screenshots];
+
+  const x = useMotionValue(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [offset, setOffset] = useState<number>(0);
+  const [halfWidth, setHalfWidth] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const startXRef = useRef<number>(0);
-  const lastOffsetRef = useRef<number>(0);
-  const previousTimestampRef = useRef<number | null>(null);
-  const scrollWidthRef = useRef<number>(0);
   const autoScrollSpeed = 100; // pixels per second
 
-  // Measure the width of one set of images (half the total width)
+  // Measure one cycle width (half the container)
   useEffect(() => {
     if (containerRef.current) {
-      // Since we duplicate the images, half of the total width represents one full cycle
-      scrollWidthRef.current = containerRef.current.scrollWidth / 2;
+      setHalfWidth(containerRef.current.scrollWidth / 2);
     }
   }, []);
 
-  // Auto-scroll using requestAnimationFrame
+  // Wrap x value into [-halfWidth, 0] for infinite loop
+  const wrappedX = useTransform(x, (latest) => {
+    if (!halfWidth) return latest;
+    return wrap(-halfWidth, 0, latest);
+  });
+
+  // Auto-scroll when not dragging
   useEffect(() => {
-    let animationFrame: number;
-    const step = (timestamp: number) => {
-      if (previousTimestampRef.current === null) {
-        previousTimestampRef.current = timestamp;
-      }
-      const delta = timestamp - previousTimestampRef.current;
-      previousTimestampRef.current = timestamp;
-      if (!isDragging && scrollWidthRef.current) {
-        setOffset((prev) => {
-          let newOffset = prev - autoScrollSpeed * (delta / 1000);
-          // Wrap offset using modulo arithmetic for a seamless loop
-          newOffset = newOffset % scrollWidthRef.current;
-          return newOffset;
-        });
-      }
-      animationFrame = requestAnimationFrame(step);
-    };
-
-    animationFrame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isDragging]);
-
-  // Pointer events (works for both mouse and touch)
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    startXRef.current = e.clientX;
-    lastOffsetRef.current = offset;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging) return;
-    const dx = e.clientX - startXRef.current;
-    setOffset(lastOffsetRef.current + dx);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(false);
-    e.currentTarget.releasePointerCapture(e.pointerId);
-  };
-
-  // Calculate effective offset to ensure a seamless loop
-  let effectiveOffset = offset;
-  if (scrollWidthRef.current) {
-    effectiveOffset = offset % scrollWidthRef.current;
-    if (effectiveOffset > 0) {
-      effectiveOffset -= scrollWidthRef.current;
+    if (!isDragging) {
+      const interval = setInterval(() => {
+        x.set(x.get() - 0.5); // Adjust speed as needed
+      }, 20);
+      return () => clearInterval(interval);
     }
-  }
+  }, [isDragging, x]);
 
   return (
     <div className="mt-20 w-full max-w-6xl overflow-hidden px-4">
-      <div
+      <motion.div
         ref={containerRef}
         className={`flex select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp} // ensures dragging stops if pointer leaves
-        style={{
-          transform: `translateX(${effectiveOffset}px)`,
-          transition: isDragging ? 'none' : 'transform 0.1s linear',
-        }}
+        style={{ x: wrappedX }}
+        drag="x"
+        dragConstraints={{ left: -halfWidth, right: 0 }}
+        dragElastic={0.1}
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={() => setIsDragging(false)}
       >
-        {[...screenshots, ...screenshots].map((src, index) => (
+        {items.map((src, index) => (
           <img
             key={index}
             src={src}
@@ -341,10 +305,11 @@ function InteractiveScroller() {
             draggable="false"
           />
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
+
 
 const Home = () => {
   return (
