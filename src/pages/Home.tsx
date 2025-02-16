@@ -212,24 +212,13 @@
 
 // export default Home;
 
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import { Download } from 'lucide-react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import * as Popmotion from 'popmotion'; 
-const { wrap } = Popmotion; 
-import s0 from '../assets/s0.png';
-import s1_1 from '../assets/s1_1.png';
-import s1_2 from '../assets/s1_2.png';
-import s2 from '../assets/s3.png';
-import s3 from '../assets/s4.png';
-import s4_1 from '../assets/s5_1.png';
-import s4_2 from '../assets/s5_2.png';
-import s5 from '../assets/s6.png';
+import { motion } from 'framer-motion';
+import InteractiveScroller from './InteractiveScroller';
 import fs1 from '../assets/fs1.png';
 import fs2 from '../assets/fs2.png';
 import fs3 from '../assets/fs3.png';
-
-const screenshots = [s0, s1_1, s1_2, s2, s3, s4_1, s4_2, s5];
 
 const features = [
   {
@@ -250,65 +239,7 @@ const features = [
   },
 ];
 
-function InteractiveScroller() {
-  // Use screenshots array for scrolling
-  const screenshots = [s0, s1_1, s1_2, s2, s3, s4_1, s4_2, s5];
-  const items = [...screenshots, ...screenshots];
 
-  const x = useMotionValue(0);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [halfWidth, setHalfWidth] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const autoScrollSpeed = 100; // pixels per second
-
-  // Measure one cycle width (half the container)
-  useEffect(() => {
-    if (containerRef.current) {
-      setHalfWidth(containerRef.current.scrollWidth / 2);
-    }
-  }, []);
-
-  // Wrap x value into [-halfWidth, 0] for infinite loop
-  const wrappedX = useTransform(x, (latest) => {
-    if (!halfWidth) return latest;
-    return wrap(-halfWidth, 0, latest);
-  });
-
-  // Auto-scroll when not dragging
-  useEffect(() => {
-    if (!isDragging) {
-      const interval = setInterval(() => {
-        x.set(x.get() - 0.5); // Adjust speed as needed
-      }, 20);
-      return () => clearInterval(interval);
-    }
-  }, [isDragging, x]);
-
-  return (
-    <div className="mt-20 w-full max-w-6xl overflow-hidden px-4">
-      <motion.div
-        ref={containerRef}
-        className={`flex select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-        style={{ x: wrappedX }}
-        drag="x"
-        dragConstraints={{ left: -halfWidth, right: 0 }}
-        dragElastic={0.1}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => setIsDragging(false)}
-      >
-        {items.map((src, index) => (
-          <img
-            key={index}
-            src={src}
-            alt={`App Screenshot ${index + 1}`}
-            className="w-60 md:w-72 h-auto mx-2 md:mx-4 rounded-xl shadow-lg"
-            draggable="false"
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-}
 
 
 const Home = () => {
