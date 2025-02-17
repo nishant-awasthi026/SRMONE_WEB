@@ -149,7 +149,7 @@ const founders = [
     name: "Prakhar Singh",
     role: "Founder",
     image: p,
-    flipText: "missing your dady?"
+    flipText: "missing your daddy?"
   },
   {
     name: "Nishant Awasthi",
