@@ -288,7 +288,7 @@ const Home = () => {
 
         {/* Download Button */}
         <motion.a
-          href="https://www.dropbox.com/scl/fi/cwdx42fxhrr95dhi5a66t/signed-app.apk?rlkey=91jvirtgxa1p5ngt4sxptapfn&st=h1din66t&dl=1"
+          href="https://drive.google.com/file/d/1yn319PB6gVHWpbNfE1xrpuPkEa59SPNf/view?usp=drivesdk"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="flex items-center space-x-2 bg-gradient-to-r from-[#BD85FC] to-[#67A2FA] px-6 md:px-8 py-3 md:py-4 rounded-full text-lg md:text-xl font-semibold hover:opacity-90 transition-opacity mx-4 mt-16"
