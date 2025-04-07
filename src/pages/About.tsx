@@ -17,14 +17,14 @@ import n from '../assets/nishant.jpeg';
 const metrics = [
   {
     title: "Active Users",
-    value: "150+",
+    value: "1000+",
     description: "Users currently active on the platform",
     icon: <Users className="w-8 h-8 text-indigo-300" />,
     gradient: "bg-gradient-to-r from-indigo-600 to-indigo-400"
   },
   {
     title: "Daily Active Users",
-    value: "150+",
+    value: "850+",
     description: "Unique users engaging daily",
     icon: <Calendar className="w-8 h-8 text-green-300" />,
     gradient: "bg-gradient-to-r from-green-600 to-green-400"
@@ -38,14 +38,14 @@ const metrics = [
   },
   {
     title: "Retention Rate",
-    value: "98%",
+    value: "92%",
     description: "Percentage of returning users",
     icon: <RefreshCw className="w-8 h-8 text-purple-300" />,
     gradient: "bg-gradient-to-r from-purple-600 to-purple-400"
   },
   {
     title: "Churn Rate",
-    value: "2%",
+    value: "8%",
     description: "Users who stopped using the app",
     icon: <TrendingDown className="w-8 h-8 text-red-300" />,
     gradient: "bg-gradient-to-r from-red-600 to-red-400"
